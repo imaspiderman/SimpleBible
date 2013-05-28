@@ -1,18 +1,19 @@
 package com.minimalists.simplebible;
 
-import bible.objects.*;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ScrollView;
+import bible.objects.*;
 
 @SuppressLint("DefaultLocale")
 public class MainActivity extends Activity {
@@ -40,13 +41,15 @@ public class MainActivity extends Activity {
 		tvText.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		tvText.setBackgroundColor(Color.BLACK);
 		tvText.setTextColor(Color.WHITE);
-		tvText.setVisibility(TextView.INVISIBLE);
+		tvText.setVisibility(View.INVISIBLE);
 		
 		lvChapters.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		lvChapters.setVisibility(ListView.INVISIBLE);
+		lvChapters.setBackgroundColor(Color.WHITE);
+		lvChapters.setVisibility(View.INVISIBLE);
 		
 		lvBooks.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		lvBooks.setVisibility(ListView.VISIBLE);
+		lvBooks.setBackgroundColor(Color.WHITE);
+		lvBooks.setVisibility(View.VISIBLE);
 		
 		ArrayAdapter<String> list = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
 		list.add("Genesis");
@@ -62,6 +65,7 @@ public class MainActivity extends Activity {
 	private void LoadBible(){
 		BibleObjectLoader loader = new BibleObjectLoader();
 		try {
+			kjv = new Bible("KJV", true);
 			java.io.InputStream in = this.getAssets().open("kjv.dat");
 			loader.loadBibleDataObject(kjv, in);
 			in.close();
@@ -84,17 +88,17 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getTitle().toString().toLowerCase() == "books"){
-			tvText.setVisibility(TextView.INVISIBLE);
-			lvChapters.setVisibility(ListView.INVISIBLE);
-			lvBooks.setVisibility(ListView.VISIBLE);
+			tvText.setVisibility(View.INVISIBLE);
+			lvChapters.setVisibility(View.INVISIBLE);
+			lvBooks.setVisibility(View.VISIBLE);
 			scrollLayout.removeViewAt(0);
 			scrollLayout.addView(lvBooks);
 		}
 		
 		if(item.getTitle().toString().toLowerCase() == "chapters"){
-			tvText.setVisibility(TextView.INVISIBLE);
-			lvBooks.setVisibility(ListView.INVISIBLE);
-			lvChapters.setVisibility(ListView.VISIBLE);
+			tvText.setVisibility(View.INVISIBLE);
+			lvBooks.setVisibility(View.INVISIBLE);
+			lvChapters.setVisibility(View.VISIBLE);
 			scrollLayout.removeViewAt(0);
 			scrollLayout.addView(lvChapters);
 		}
