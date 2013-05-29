@@ -1,7 +1,5 @@
 package com.minimalists.simplebible;
 
-import java.util.HashMap;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.SuppressLint;
@@ -110,6 +108,7 @@ public class MainActivity extends Activity {
 				
 				linearLayout.removeAllViews();
 				linearLayout.addView(lvChapters);
+				lvChapters.scrollTo(0, 0);
 				getWindow().setTitle(kjv.getBook(iSelectedBook).BookName);
 			}
 		});
@@ -129,18 +128,10 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		if(!outState.containsKey("BibleData")) outState.putSerializable("BibleData", BibleMap);
-		if(!outState.containsKey("BibleKey")) outState.putSerializable("BibleKey", BibleKey);
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
 	public void onBackPressed() {
 		Toast.makeText(this, "If you wish to exit and unload the app please press the exit button from the menu options.", Toast.LENGTH_LONG).show();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void LoadBible(final Bundle saveState){
 		Runnable r = new Runnable(){
 			@Override
@@ -148,18 +139,14 @@ public class MainActivity extends Activity {
 				BibleObjectLoader loader = new BibleObjectLoader();
 				try {
 					kjv = new Bible("KJV", true);
-					if(saveState == null){
-						java.io.InputStream in = getAssets().open("hashmap_kjv.jpg");
-						BibleMap = loader.loadBibleHashMap(in);
-						in.close();
-						
-						in = getAssets().open("hashmapkey_kjv.jpg");
-						BibleKey = loader.loadBibleHashMapKey(in);
-						in.close();
-					}else{
-						BibleMap = (HashMap<Integer, String>) saveState.getSerializable("BibleData");
-						BibleKey = (HashMap<Integer, Integer>) saveState.getSerializable("BibleKey");
-					}
+					java.io.InputStream in = getAssets().open("hashmap_kjv.jpg");
+					BibleMap = loader.loadBibleHashMap(in);
+					in.close();
+					
+					in = getAssets().open("hashmapkey_kjv.jpg");
+					BibleKey = loader.loadBibleHashMapKey(in);
+					in.close();
+					
 				} catch (Exception e) {
 					android.widget.Toast.makeText(getBaseContext(), e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
 				}
@@ -208,6 +195,7 @@ public class MainActivity extends Activity {
 			lvBooks.setVisibility(View.VISIBLE);
 			linearLayout.removeAllViews();
 			linearLayout.addView(lvBooks);
+			lvBooks.scrollTo(0, 0);
 			setContentView(linearLayout);
 		}
 		
@@ -216,7 +204,8 @@ public class MainActivity extends Activity {
 			lvBooks.setVisibility(View.INVISIBLE);
 			lvChapters.setVisibility(View.VISIBLE);
 			linearLayout.removeAllViews();
-			linearLayout.addView(lvChapters);			
+			linearLayout.addView(lvChapters);	
+			lvChapters.scrollTo(0, 0);
 			setContentView(linearLayout);
 		}
 		
@@ -259,6 +248,7 @@ public class MainActivity extends Activity {
 		getWindow().setTitle(kjv.getBook(iSelectedBook).BookName);
 		tvText.setText(BibleMap.get((iSelectedBook << 8) | iSelectedChapter));
 		setContentView(scrollLayout);
+		scrollLayout.scrollTo(0, 0);
 	}
 
 }
