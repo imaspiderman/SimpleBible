@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
@@ -36,6 +37,9 @@ public class MainActivity extends Activity {
 	Integer iSelectedBook = 1;
 	Integer iSelectedChapter = 1;
 	private Handler loaderHandler;
+	private View.OnTouchListener textViewTouchListener;
+	float lastX = 0.0f;
+	float currX = 0.0f;
 	
 	@SuppressLint("UseSparseArrays")
 	@Override
@@ -121,15 +125,57 @@ public class MainActivity extends Activity {
 			    setTextViewActive();
 			}
 		});
-		
+		scrollLayout.setOnTouchListener(textViewTouchListener);
 		linearLayout.addView(lvBooks);
 		tvText.setText("Loading and Decompressing the Bible into Memory.\nThis can take a little while");
 		setContentView(scrollLayout);
 	}
+	
+	
 
 	@Override
-	public void onBackPressed() {
-		Toast.makeText(this, "If you wish to exit and unload the app please press the exit button from the menu options.", Toast.LENGTH_LONG).show();
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		super.dispatchTouchEvent(ev);
+		return textViewTouchListener(ev);
+	}
+
+
+
+	public boolean textViewTouchListener(MotionEvent event) {
+		// TODO Auto-generated method stub		
+		if(event.getAction() == MotionEvent.ACTION_DOWN){
+			lastX = event.getX();
+		}
+		if(event.getAction() == MotionEvent.ACTION_UP){
+			currX = event.getX();
+			android.view.Display d = this.getWindowManager().getDefaultDisplay();
+			int dx = (d.getWidth()/3);
+			if(java.lang.Math.abs(lastX-currX) > dx){//Swipe needs to be roughly 1/3 screen width
+				if(lastX < currX){//Finger moves from left to right
+					if(this.iSelectedChapter > 1){
+						this.iSelectedChapter--;				
+					}else{
+						if(this.iSelectedBook > 1){
+							this.iSelectedBook--;
+							this.iSelectedChapter = BibleKey.get(this.iSelectedBook);
+						}
+					}
+					setTextViewActive();
+				}else{//Finger moves from right to left
+					if(this.iSelectedChapter < BibleKey.get(this.iSelectedBook)){
+						this.iSelectedChapter++;				
+					}else{
+						if(this.iSelectedBook < 66){
+							this.iSelectedBook++;
+							this.iSelectedChapter = 1;
+						}
+					}
+					setTextViewActive();
+				}
+			}
+		}
+		return false;
+		//return super.onTouchEvent(event);
 	}
 
 	private void LoadBible(final Bundle saveState){
