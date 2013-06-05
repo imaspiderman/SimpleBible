@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ScrollView;
-import android.widget.Toast;
 import bible.objects.*;
 
 @SuppressLint("DefaultLocale")
