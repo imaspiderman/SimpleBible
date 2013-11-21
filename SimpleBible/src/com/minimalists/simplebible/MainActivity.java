@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
 				linearLayout.removeAllViews();
 				linearLayout.addView(lvChapters);
 				lvChapters.scrollTo(0, 0);
-				getWindow().setTitle(kjv.getBook(iSelectedBook).BookName);
+				getWindow().setTitle(kjv.getBook(iSelectedBook).BookName + " " + iSelectedChapter);
 			}
 		});
 		
@@ -223,10 +223,12 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		menu.add("Prev Chapter");
-		menu.add("Next Chapter");
+		//menu.add("Prev Chapter");
+		//menu.add("Next Chapter");
 		menu.add("Books");
 		menu.add("Chapters");
+		menu.add("Font Up");
+		menu.add("Font Down");
 		menu.add("Exit");
 		return true;
 	}
@@ -254,6 +256,7 @@ public class MainActivity extends Activity {
 			setContentView(linearLayout);
 		}
 		
+		
 		if(item.getTitle().toString().toLowerCase().equals("next chapter")){
 			if(this.iSelectedChapter < BibleKey.get(this.iSelectedBook)){
 				this.iSelectedChapter++;				
@@ -278,6 +281,16 @@ public class MainActivity extends Activity {
 			setTextViewActive();
 		}
 		
+		if(item.getTitle().toString().toLowerCase().equals("font up")){
+			this.tvText.setTextSize(this.tvText.getTextSize() + 1.0f);
+			setTextViewActive();
+		}
+		
+		if(item.getTitle().toString().toLowerCase().equals("font down")){
+			this.tvText.setTextSize(this.tvText.getTextSize() - 1.0f);
+			setTextViewActive();
+		}
+		
 		if(item.getTitle().toString().toLowerCase().equals("exit")){
 			this.finish();
 		}
@@ -290,7 +303,7 @@ public class MainActivity extends Activity {
 		lvChapters.setVisibility(View.VISIBLE);
 		linearLayout.removeAllViews();
 		
-		getWindow().setTitle(kjv.getBook(iSelectedBook).BookName);
+		getWindow().setTitle(kjv.getBook(iSelectedBook).BookName + " " + iSelectedChapter);
 		tvText.setText(BibleMap.get((iSelectedBook << 8) | iSelectedChapter));
 		setContentView(scrollLayout);
 		scrollLayout.scrollTo(0, 0);
