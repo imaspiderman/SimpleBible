@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -282,12 +283,12 @@ public class MainActivity extends Activity {
 		}
 		
 		if(item.getTitle().toString().toLowerCase().equals("font up")){
-			this.tvText.setTextSize(this.tvText.getTextSize() + 1.0f);
+			this.tvText.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.tvText.getTextSize() + 5.0f);
 			setTextViewActive();
 		}
 		
 		if(item.getTitle().toString().toLowerCase().equals("font down")){
-			this.tvText.setTextSize(this.tvText.getTextSize() - 1.0f);
+			this.tvText.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.tvText.getTextSize() - 5.0f);
 			setTextViewActive();
 		}
 		
