@@ -1,11 +1,11 @@
 package com.minimalists.simplebible;
 
-import android.os.Bundle;
-import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +17,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.ScrollView;
+import android.widget.TextView;
+
 import bible.objects.*;
 
 @SuppressLint("DefaultLocale")
@@ -39,7 +40,10 @@ public class MainActivity extends Activity {
 	private Handler loaderHandler;
 	private View.OnTouchListener textViewTouchListener;
 	float lastX = 0.0f;
+    float lastY = 0.0f;
 	float currX = 0.0f;
+    float currY = 0.0f;
+	boolean bFlag = false;
 	
 	@SuppressLint("UseSparseArrays")
 	@Override
@@ -145,9 +149,11 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub		
 		if(event.getAction() == MotionEvent.ACTION_DOWN){
 			lastX = event.getX();
+            lastY = event.getY();
 		}
 		if(event.getAction() == MotionEvent.ACTION_UP){
 			currX = event.getX();
+            currY = event.getY();
 			android.view.Display d = this.getWindowManager().getDefaultDisplay();
 			int dx = (d.getWidth()/3);
 			if(java.lang.Math.abs(lastX-currX) > dx){//Swipe needs to be roughly 1/3 screen width
@@ -173,6 +179,11 @@ public class MainActivity extends Activity {
 					setTextViewActive();
 				}
 			}
+            if(event.getEventTime() - event.getDownTime() > 1000
+                    && Math.abs(lastX - currX) < 2
+                    && Math.abs(lastY - currY) < 2){
+                this.openOptionsMenu();
+            }
 		}
 		return false;
 		//return super.onTouchEvent(event);
@@ -234,7 +245,7 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	@Override
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(BibleMap == null || BibleKey == null)return false;
 		if(item.getTitle().toString().toLowerCase().equals("books")){
